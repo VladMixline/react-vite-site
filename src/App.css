@@ -167,6 +167,15 @@
   color: var(--color-soft-text);
 }
 
+.coupleNames {
+  margin: 0 0 14px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.95rem, 7vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--color-champagne);
+}
+
 .heroCard h1,
 .sectionTitle,
 .detailCard h3,
