@@ -1,0 +1,29 @@
+---
+description: Enforce mobile-first responsive UI across the project
+alwaysApply: true
+---
+
+# Mobile-First Responsive Design
+
+- Build every UI change mobile-first. Start with small screens, then enhance for tablet and desktop with `min-width` breakpoints.
+- Keep the phone layout as the priority. Core content and actions must stay clear, readable, and usable on narrow screens.
+- Prefer fluid sizing with `%`, `rem`, `clamp()`, `minmax()`, flexible grid/flex layouts, and `max-width` over fixed pixel widths.
+- Avoid layouts that depend on hover, large viewports, or precise mouse interaction. Touch interaction must work well by default.
+- Keep tap targets large enough, preserve readable text sizes, and maintain comfortable spacing on mobile.
+- When editing pages or components, check that the result still looks intentional on phone and desktop, not only technically responsive.
+
+## Example
+
+```css
+/* Good: mobile base, desktop enhancement */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .cardGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+```
