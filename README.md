@@ -6,6 +6,8 @@
 
 - `npm run dev` — запускает сайт и watcher, который автоматически делает `commit` и `push` после изменения файлов проекта.
 - `npm run dev:site` — запускает только Vite без автокоммита.
+- `npm run telegram-api` — запускает локальный API для автоматической отправки формы в Telegram.
+- `npm run telegram:chat-id` — помогает получить `TELEGRAM_CHAT_ID` после того, как вы напишете боту в Telegram.
 - `npm run autosave` — запускает только watcher автосохранения.
 - `npm run build` — собирает production-версию сайта.
 - `npm run lint` — проверяет код через ESLint.
@@ -20,6 +22,19 @@
 1. добавляет изменения в git;
 2. создаёт коммит вида `chore: auto save ...`;
 3. отправляет изменения в GitHub.
+
+## Telegram-форма
+
+Для полностью автоматической отправки формы в Telegram:
+
+1. создайте Telegram-бота через `@BotFather`;
+2. скопируйте `.env.example` в `.env.local`;
+3. заполните `TELEGRAM_BOT_TOKEN`;
+4. напишите боту в Telegram хотя бы одно сообщение;
+5. выполните `npm run telegram:chat-id` и возьмите нужный `TELEGRAM_CHAT_ID`;
+6. сохраните `TELEGRAM_CHAT_ID` в `.env.local`.
+
+После этого `npm run dev` поднимет сайт и локальный Telegram API вместе, и форма будет уходить автоматически. Если бот ещё не настроен, сайт использует запасной сценарий: откроет Telegram с уже подготовленным сообщением.
 
 ## Следующие шаги
 
