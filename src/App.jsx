@@ -182,16 +182,20 @@ function App() {
         </div>
 
         <div className="detailGrid">
-          {eventDetails.map(({ title, value, caption, Icon }) => (
-            <article className="detailCard surfaceCard" key={title}>
-              <IconShell>
-                <Icon />
-              </IconShell>
-              <p className="detailLabel">{title}</p>
-              <h3>{value}</h3>
-              <p>{caption}</p>
-            </article>
-          ))}
+          {eventDetails.map((detail) => {
+            const DetailIcon = detail.Icon
+
+            return (
+              <article className="detailCard surfaceCard" key={detail.title}>
+                <IconShell>
+                  <DetailIcon />
+                </IconShell>
+                <p className="detailLabel">{detail.title}</p>
+                <h3>{detail.value}</h3>
+                <p>{detail.caption}</p>
+              </article>
+            )
+          })}
         </div>
       </section>
 
