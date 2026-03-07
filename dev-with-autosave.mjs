@@ -8,6 +8,7 @@ function startProcess(args) {
   const child = spawn(npmCommand, args, {
     cwd: process.cwd(),
     stdio: 'inherit',
+    shell: process.platform === 'win32',
   })
 
   children.push(child)
