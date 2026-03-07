@@ -35,4 +35,5 @@ process.on('SIGINT', () => {
 })
 
 startProcess(['run', 'autosave'])
+startProcess(['run', 'telegram-api'])
 startProcess(['run', 'dev:site'])
