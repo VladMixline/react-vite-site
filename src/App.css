@@ -97,7 +97,7 @@
 
 .sectionTitle,
 .heroNames,
-.heroCard h1,
+.heroIntro h1,
 .detailCard h3,
 .dressNote h3,
 .mapAddress h3,
@@ -136,18 +136,23 @@
 .heroSection {
   min-height: calc(100vh - 36px);
   display: grid;
-  align-items: center;
-  padding: 22px 0 8px;
+  align-content: center;
+  justify-items: center;
+  gap: 28px;
+  padding: 28px 0 8px;
+  text-align: center;
 }
 
-.heroCard {
-  padding: 34px 22px;
+.heroIntro {
+  width: min(760px, 100%);
+  display: grid;
+  justify-items: center;
 }
 
 .heroDivider {
   width: 116px;
   height: 1px;
-  margin: 16px 0 18px;
+  margin: 16px auto 18px;
   background: linear-gradient(90deg, transparent, rgba(236, 225, 206, 0.92), transparent);
 }
 
@@ -164,8 +169,8 @@
   color: var(--color-champagne);
 }
 
-.heroCard h1 {
-  max-width: 13ch;
+.heroIntro h1 {
+  max-width: 15ch;
   margin-top: 16px;
   font-size: var(--step-4);
   line-height: 0.96;
@@ -174,35 +179,43 @@
 
 .heroLead {
   margin-top: 18px;
-  max-width: 52ch;
+  max-width: 56ch;
   color: var(--color-cream);
 }
 
 .heroText {
-  margin-top: 16px;
-  max-width: 58ch;
+  margin-top: 14px;
+  max-width: 62ch;
 }
 
 .heroMeta {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  justify-content: center;
+  gap: 8px 18px;
   margin-top: 22px;
 }
 
 .heroMeta span {
-  padding: 10px 15px;
-  border-radius: 999px;
-  border: 1px solid rgba(239, 228, 211, 0.12);
-  background: rgba(250, 245, 238, 0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: var(--step--1);
   color: var(--color-cream);
+}
+
+.heroMeta span::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: rgba(215, 193, 155, 0.72);
 }
 
 .heroActions,
 .mapActions {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
   margin-top: 24px;
 }
@@ -214,7 +227,6 @@
   justify-content: center;
   min-height: 54px;
   padding: 0 22px;
-  border-radius: 999px;
   border: 1px solid transparent;
   font-size: var(--step--1);
   font-weight: 700;
@@ -225,6 +237,10 @@
     background-color 180ms ease,
     box-shadow 180ms ease,
     opacity 180ms ease;
+}
+
+.heroActions > * {
+  width: min(100%, 260px);
 }
 
 .primaryButton {
@@ -249,17 +265,38 @@
   opacity: 0.82;
 }
 
-.heroAmbient {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+.photoMarquee {
+  --marquee-gap: 14px;
+  width: 100%;
+  overflow: hidden;
+  padding-block: 8px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.photoMarqueeTrack {
+  display: flex;
+  gap: var(--marquee-gap);
+  width: max-content;
+  animation: marqueeScroll 40s linear infinite;
+  will-change: transform;
+}
+
+.photoMarqueeGroup {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--marquee-gap);
+}
+
+.marqueePhoto {
+  flex: 0 0 clamp(180px, 52vw, 320px);
+  aspect-ratio: 4 / 5;
 }
 
 .glassPhoto {
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(241, 232, 218, 0.12);
-  border-radius: 28px;
   background:
     linear-gradient(180deg, rgba(255, 250, 244, 0.1), rgba(255, 250, 244, 0.03)),
     rgba(44, 32, 26, 0.22);
@@ -363,7 +400,6 @@
   width: 50px;
   height: 50px;
   margin-bottom: 18px;
-  border-radius: 18px;
   color: var(--color-champagne);
   border: 1px solid rgba(238, 228, 211, 0.12);
   background: rgba(255, 248, 240, 0.05);
@@ -436,7 +472,6 @@
   width: 100%;
   min-height: 340px;
   border: 0;
-  border-radius: 24px;
   filter: saturate(0.74) sepia(0.12);
 }
 
@@ -479,7 +514,6 @@
   gap: 10px;
   align-content: start;
   padding: 14px;
-  border-radius: 22px;
   border: 1px solid rgba(238, 228, 211, 0.1);
   background: rgba(255, 248, 240, 0.05);
 }
@@ -487,7 +521,6 @@
 .swatchTone {
   width: 100%;
   height: 56px;
-  border-radius: 16px;
   border: 1px solid rgba(255, 248, 240, 0.16);
   box-shadow: inset 0 1px 0 rgba(255, 250, 244, 0.24);
 }
@@ -562,7 +595,6 @@
   width: 100%;
   padding: 16px 16px;
   border: 1px solid rgba(239, 228, 211, 0.12);
-  border-radius: 18px;
   background: rgba(255, 248, 240, 0.05);
   color: var(--color-cream);
   outline: none;
@@ -597,7 +629,6 @@
 
 .statusNote {
   padding: 14px 16px;
-  border-radius: 18px;
   border: 1px solid rgba(239, 228, 211, 0.1);
   background: rgba(255, 248, 240, 0.05);
 }
@@ -614,6 +645,16 @@
 
 .statusNoteError {
   border-color: rgba(190, 132, 112, 0.28);
+}
+
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - var(--marquee-gap) / 2));
+  }
 }
 
 @keyframes riseIn {
@@ -633,6 +674,21 @@
   animation: riseIn 680ms ease both;
 }
 
+.surfaceCard,
+.glassPhoto,
+.primaryButton,
+.secondaryButton,
+.iconShell,
+.mapFrame iframe,
+.paletteSwatch,
+.swatchTone,
+.field input,
+.field textarea,
+.field select,
+.statusNote {
+  border-radius: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .heroSection,
   .sectionShell,
@@ -640,6 +696,16 @@
   .secondaryButton {
     animation: none;
     transition: none;
+  }
+
+  .photoMarquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .photoMarqueeTrack {
+    animation: none;
   }
 }
 
@@ -649,36 +715,28 @@
   }
 
   .heroSection {
-    padding: 24px 0 12px;
+    gap: 34px;
+    padding: 30px 0 12px;
   }
 
-  .heroCard {
-    max-width: 760px;
-    padding: 38px 30px;
+  .heroActions > * {
+    width: auto;
+    min-width: 220px;
   }
 
   .heroActions,
   .mapActions {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .ambientPhoto1 {
-    top: 22px;
-    right: 12px;
-    width: 220px;
+  .photoMarquee {
+    --marquee-gap: 18px;
   }
 
-  .ambientPhoto2 {
-    bottom: 40px;
-    right: 80px;
-    width: 190px;
-  }
-
-  .ambientPhoto3 {
-    bottom: 24px;
-    left: 28px;
-    width: 170px;
+  .marqueePhoto {
+    flex-basis: clamp(220px, 32vw, 340px);
   }
 
   .detailGrid {
@@ -718,30 +776,12 @@
 
   .heroSection {
     min-height: calc(100vh - 56px);
+    gap: 40px;
     padding: 34px 0 18px;
   }
 
-  .heroCard {
-    max-width: 860px;
-    padding: 44px 40px;
-  }
-
-  .ambientPhoto1 {
-    top: 36px;
-    right: 48px;
-    width: 260px;
-  }
-
-  .ambientPhoto2 {
-    bottom: 60px;
-    right: 160px;
-    width: 210px;
-  }
-
-  .ambientPhoto3 {
-    bottom: 48px;
-    left: 70px;
-    width: 190px;
+  .marqueePhoto {
+    flex-basis: clamp(240px, 24vw, 360px);
   }
 
   .photoMosaic {

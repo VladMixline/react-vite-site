@@ -71,7 +71,6 @@ function App() {
     8,
   )
 
-  const heroPhotos = galleryPhotos.slice(0, 3)
   const moodPhotos = galleryPhotos.slice(3, 7)
   const accentPhotoOne = galleryPhotos[1]
   const accentPhotoTwo = galleryPhotos[2]
@@ -134,18 +133,7 @@ function App() {
       <div className="pageVeil" aria-hidden="true" />
 
       <section className="heroSection">
-        <div className="heroAmbient" aria-hidden="true">
-          {heroPhotos.map((photo, index) => (
-            <GlassPhoto
-              photo={photo}
-              className={`glassPhoto ambientPhoto ambientPhoto${index + 1}`}
-              key={`hero-photo-${index + 1}`}
-              decorative
-            />
-          ))}
-        </div>
-
-        <div className="heroCard surfaceCard">
+        <div className="heroIntro">
           <p className="sectionTag">Wedding Invitation</p>
           <div className="heroDivider" aria-hidden="true" />
           <p className="heroGreeting">Дорогие родные и друзья,</p>
@@ -176,6 +164,8 @@ function App() {
             </a>
           </div>
         </div>
+
+        <PhotoMarquee photos={galleryPhotos} />
       </section>
 
       <section className="sectionShell" id="details">
@@ -545,6 +535,27 @@ function GlassPhoto({ photo, className = '', decorative = false }) {
       ) : (
         <div className="glassPhotoPlaceholder" aria-hidden="true" />
       )}
+    </div>
+  )
+}
+
+function PhotoMarquee({ photos }) {
+  return (
+    <div className="photoMarquee" role="img" aria-label="Фотографии пары">
+      <div className="photoMarqueeTrack">
+        {[0, 1].map((groupIndex) => (
+          <div className="photoMarqueeGroup" key={`photo-group-${groupIndex}`} aria-hidden={groupIndex === 1}>
+            {photos.map((photo, index) => (
+              <GlassPhoto
+                photo={photo}
+                className="glassPhoto marqueePhoto"
+                key={`marquee-photo-${groupIndex}-${index}`}
+                decorative
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
