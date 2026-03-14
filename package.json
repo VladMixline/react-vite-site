@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "node dev-with-autosave.mjs",
     "dev:site": "vite",
+    "dev:telegram": "node dev-with-telegram.mjs",
     "telegram-api": "node telegram-api.mjs",
     "telegram:chat-id": "node telegram-chat-id.mjs",
     "autosave": "node auto-sync.mjs",
     "build": "vite build",
     "lint": "eslint .",
+    "ci": "npm run lint && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -9,27 +9,38 @@
   --step-2: clamp(1.64rem, 1.28rem + 1.5vw, 2.34rem);
   --step-3: clamp(2.16rem, 1.62rem + 2.4vw, 3.56rem);
   --step-4: clamp(3rem, 2.14rem + 4.2vw, 5.6rem);
-  --color-cream: #f6efe6;
-  --color-soft-text: #ded1c0;
-  --color-champagne: #d9c39d;
-  --color-muted-gold: #bea985;
-  --color-khaki: #7c7a5a;
-  --color-cocoa: #6b4a3a;
-  --color-espresso: #241812;
+  --color-cream: #5c4538;
+  --color-soft-text: #846c5d;
+  --color-champagne: #aa7f5e;
+  --color-muted-gold: #c29f79;
+  --color-cocoa: #8f6950;
+  --color-espresso: #3f2f25;
+  --color-text-muted: rgba(92, 69, 56, 0.9);
+  --color-text-faint: rgba(92, 69, 56, 0.78);
+  --color-placeholder: rgba(132, 108, 93, 0.62);
+  --color-button-text: #fffaf4;
+  --color-status-success: #5d6b4d;
+  --color-status-fallback: #835f44;
+  --color-status-error: #8a5446;
+  --line-height-body: 1.72;
+  --letter-spacing-label: 0.16em;
+  --letter-spacing-tag: 0.2em;
 
   font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
   color: var(--color-cream);
-  background: #1a120e;
+  background: #f6eee5;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 *,
@@ -43,6 +54,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-family: var(--font-body);
+  background:
+    radial-gradient(circle at top, rgba(255, 251, 246, 0.98), rgba(246, 236, 224, 0.92) 48%, rgba(241, 230, 217, 0.94) 100%);
 }
 
 a {
@@ -63,6 +76,6 @@ img {
 }
 
 ::selection {
-  background: rgba(215, 193, 155, 0.26);
-  color: var(--color-cream);
+  background: rgba(194, 159, 121, 0.32);
+  color: var(--color-espresso);
 }

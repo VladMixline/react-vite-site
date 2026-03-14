@@ -8,14 +8,26 @@ const backImages = Object.values(
   }),
 )
 
-const mainImages = Object.values(
-  import.meta.glob('./fotos/*.{png,jpg,jpeg,webp,avif,PNG,JPG,JPEG,WEBP,AVIF}', {
+const mainPhotoAssets = Object.entries(
+  import.meta.glob(['./fotos/*.{png,jpg,jpeg,webp,avif,PNG,JPG,JPEG,WEBP,AVIF}', '!./fotos/Гамма.jpg'], {
     eager: true,
     import: 'default',
   }),
 )
+  .map(([path, source], index) => ({
+    path,
+    src: source,
+    alt: getPhotoAlt(path, index),
+  }))
+  .sort((a, b) => {
+    const nameA = a.path.replace(/^.*[/\\]/, '')
+    const nameB = b.path.replace(/^.*[/\\]/, '')
+    return nameA.localeCompare(nameB, undefined, { numeric: true })
+  })
 
 const coupleNames = 'Владислав & Алена Чарыковы'
+const groomName = 'Владислав'
+const brideName = 'Алена'
 const telegramUsername = 'zhyk04'
 const venueAddress = 'Тамбов, ул. Маршала Малиновского, 39'
 const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(venueAddress)}&t=&z=16&ie=UTF8&iwloc=&output=embed`
@@ -46,12 +58,29 @@ const eventDetails = [
 ]
 
 const paletteColors = [
-  { name: 'Глубокий шоколад', tone: '#3b261c' },
-  { name: 'Кофейный', tone: '#6b4a3a' },
-  { name: 'Темный хаки', tone: '#656349' },
-  { name: 'Оливково-песочный', tone: '#8f8a64' },
-  { name: 'Молочно-бежевый', tone: '#ece2d2' },
-  { name: 'Шампань', tone: '#d7c19b' },
+  { name: 'Сливочная вуаль', tone: '#e8dfd1' },
+  { name: 'Мягкий шоколад', tone: '#8f6553' },
+  { name: 'Темное какао', tone: '#34231f' },
+  { name: 'Черный атлас', tone: '#070707' },
+  { name: 'Шалфейный шелк', tone: '#a8b091' },
+  { name: 'Оливковый сатин', tone: '#707a5a' },
+  { name: 'Глубокая олива', tone: '#556039' },
+  { name: 'Изумрудная ночь', tone: '#0c2d23' },
+]
+
+const coordinatorMoments = [
+  {
+    title: 'Перед началом',
+    text: 'Если вы приедете немного раньше, Ирина поможет спокойно разместиться и подскажет, где начинается welcome.',
+  },
+  {
+    title: 'Во время сбора гостей',
+    text: 'Она направит к нужной зоне, поможет сориентироваться на площадке и подскажет по ходу вечера.',
+  },
+  {
+    title: 'В любой момент праздника',
+    text: 'Если понадобится решить организационный вопрос без суеты, можно смело ориентироваться на Ирину.',
+  },
 ]
 
 const initialFormState = {
@@ -63,17 +92,26 @@ const initialFormState = {
 
 function App() {
   const backgroundPhoto = backImages[0] ?? null
-  const galleryPhotos = fillPhotos(
-    mainImages.map((src, index) => ({
-      src,
-      alt: `Свадебная фотография ${index + 1}`,
-    })),
-    8,
-  )
+  const galleryPhotos = fillPhotos(mainPhotoAssets, 8)
 
-  const moodPhotos = galleryPhotos.slice(3, 7)
-  const accentPhotoOne = galleryPhotos[1]
-  const accentPhotoTwo = galleryPhotos[2]
+  const groomPhoto = findPhotoByPath(mainPhotoAssets, 'жених') ?? galleryPhotos[0]
+  const bridePhoto = findPhotoByPath(mainPhotoAssets, 'невест') ?? galleryPhotos[1] ?? galleryPhotos[0]
+  const coupleProfiles = [
+    {
+      role: 'Жених',
+      name: groomName,
+      photo: groomPhoto,
+      description:
+        'Владислав особенно ждет этот день как возможность собрать рядом самых близких людей и прожить праздник спокойно, красиво и по-настоящему тепло.',
+    },
+    {
+      role: 'Невеста',
+      name: brideName,
+      photo: bridePhoto,
+      description:
+        'Алена мечтает наполнить этот вечер светом, нежностью и искренними встречами, чтобы каждая улыбка и каждое объятие остались в памяти надолго.',
+    },
+  ]
 
   const [formData, setFormData] = useState(initialFormState)
   const [submitState, setSubmitState] = useState('idle')
@@ -155,14 +193,9 @@ function App() {
             <span>сбор гостей к 16:00</span>
           </div>
 
-          <div className="heroActions">
-            <a className="primaryButton" href="#details">
-              Смотреть детали
-            </a>
-            <a className="secondaryButton" href="#rsvp">
-              Ответить в анкете
-            </a>
-          </div>
+          <p className="heroReminder">
+            Пожалуйста, не забудьте отправить анкету
+          </p>
         </div>
 
         <PhotoMarquee photos={galleryPhotos} />
@@ -199,53 +232,59 @@ function App() {
       </section>
 
       <section className="sectionShell">
-        <div className="moodLayout">
-          <div className="sectionHeader sectionHeaderTight">
-            <p className="sectionTag">Атмосфера дня</p>
-            <h2 className="sectionTitle">
-              Фотографии остаются частью общей атмосферы, а не акцентом только в одной точке
-            </h2>
-            <p className="sectionText">
-              Мы распределили снимки мягкими полупрозрачными слоями по странице, чтобы весь
-              сайт ощущался цельным, воздушным и очень живым.
-            </p>
-          </div>
+        <div className="sectionHeader sectionHeaderTight">
+          <p className="sectionTag">Жених и невеста</p>
+          <h2 className="sectionTitle">Те, кто с радостью ждут встречи с вами в этот день</h2>
+          <p className="sectionText">
+            Нам хочется, чтобы приглашение было не только о деталях праздника, но и немного
+            о нас самих, поэтому мы оставили здесь два отдельных портрета жениха и невесты.
+          </p>
+        </div>
 
-          <div className="photoMosaic">
-            {moodPhotos.map((photo, index) => (
-              <GlassPhoto
-                photo={photo}
-                className={`glassPhoto mosaicPhoto mosaicPhoto${index + 1}`}
-                key={`mood-photo-${index + 1}`}
-              />
-            ))}
-          </div>
+        <div className="coupleShowcase">
+          {coupleProfiles.map((profile) => (
+            <article className="personCard surfaceCard" key={profile.role}>
+              <GlassPhoto photo={profile.photo} className="glassPhoto personPhoto" />
+
+              <div className="personContent">
+                <p className="personRole">{profile.role}</p>
+                <h3>{profile.name}</h3>
+                <p>{profile.description}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
       <section className="sectionShell">
-        <div className="coordinatorWrap">
+        <div className="coordinatorLayout">
           <div className="coordinatorCard surfaceCard">
-            <IconShell>
-              <CoordinatorIcon />
-            </IconShell>
-
-            <div className="coordinatorText">
-              <p className="sectionTag">Организационная информация</p>
-              <h2 className="sectionTitle sectionTitleCompact">
-                По прибытии вас встретит координатор Ирина
-              </h2>
-              <p className="sectionText">
-                Ирина поможет вам сориентироваться на площадке, проводит в welcome-зону и
-                подскажет все необходимое, чтобы начало вечера было легким, спокойным и
-                по-настоящему заботливым.
-              </p>
+            <div className="coordinatorIntro">
+              <div className="coordinatorText">
+                <p className="sectionTag">Организационная информация</p>
+                <h2 className="sectionTitle sectionTitleCompact">
+                  В день свадьбы рядом с вами будет координатор Ирина
+                </h2>
+                <p className="sectionText">
+                  Нам важно, чтобы ваше прибытие и весь вечер проходили легко и спокойно,
+                  поэтому организационные моменты мы доверили Ирине. Она встретит гостей,
+                  поможет сориентироваться и снимет все лишние вопросы с первых минут.
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="softPhotos">
-            <GlassPhoto photo={accentPhotoOne} className="glassPhoto sidePhoto sidePhotoTop" />
-            <GlassPhoto photo={accentPhotoTwo} className="glassPhoto sidePhoto sidePhotoBottom" />
+          <div className="coordinatorAside">
+            <div className="coordinatorMoments">
+              <div className="coordinatorSteps">
+                {coordinatorMoments.map((moment) => (
+                  <article className="coordinatorStep" key={moment.title}>
+                    <p className="coordinatorStepTitle">{moment.title}</p>
+                    <p>{moment.text}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -262,10 +301,6 @@ function App() {
           </div>
 
           <div className="mapPanel surfaceCard">
-            <p className="sectionTag">Карта площадки</p>
-            <h2 className="sectionTitle sectionTitleCompact">
-              До праздника легко добраться без лишней спешки
-            </h2>
             <p className="sectionText">
               Мы отметили банкетный зал PLES на карте, чтобы вы могли заранее открыть
               маршрут и приехать к нам спокойно, наслаждаясь ожиданием красивого вечера.
@@ -288,61 +323,31 @@ function App() {
         </div>
       </section>
 
-      <section className="sectionShell">
-        <div className="dressLayout">
-          <div className="dressCopy">
-            <p className="sectionTag">Dress Code</p>
-            <h2 className="sectionTitle">
-              Шоколадно-хаки палитра с мягкими светлыми и шампанскими нюансами
-            </h2>
-            <p className="sectionText">
-              Нам будет особенно приятно, если ваши образы поддержат атмосферу вечера:
-              уютную, благородную, спокойную и очень теплую. Лучше всего подойдут
-              природные оттенки и деликатные фактуры.
-            </p>
-
-            <div className="dressNote surfaceCard">
-              <h3>Настроение образа</h3>
-              <p>
-                Выбирайте лаконичные силуэты, мягкие ткани, матовые текстуры и
-                благородные природные цвета: шоколадный, кофейный, хаки, оливковый,
-                молочный и шампань.
-              </p>
-
-              <ul className="dressList">
-                <li>шоколадный, кофейный и теплый коричневый</li>
-                <li>хаки, оливковый и приглушенный зеленый</li>
-                <li>молочный, бежевый, шампань</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="dressVisual">
-            <div className="paletteCard surfaceCard">
-              <p className="paletteLabel">Рекомендуемая палитра</p>
-              <div className="paletteGrid">
-                {paletteColors.map((color) => (
-                  <article className="paletteSwatch" key={color.name}>
-                    <span className="swatchTone" style={{ backgroundColor: color.tone }} />
-                    <strong>{color.name}</strong>
-                  </article>
-                ))}
+      <section className="sectionShell sectionShell--dress">
+        <div className="dressBlock">
+          <p className="sectionTag">Dress Code</p>
+          <h2 className="dressTitle">Сливочно-оливковая палитра</h2>
+          <p className="dressText">
+            Будем рады, если ваши образы поддержат палитру: мягкий сливочный свет,
+            шалфейные и оливковые оттенки, шоколадные нюансы, глубокий изумруд и
+            благородный тёмный акцент.
+          </p>
+          <div className="dressPalette" role="list" aria-label="Рекомендуемая палитра">
+            {paletteColors.map((color) => (
+              <div className="dressSwatch" key={color.name} title={color.name}>
+                <span className="dressSwatchTone" style={{ backgroundColor: color.tone }} />
+                <span className="dressSwatchName">{color.name}</span>
               </div>
-            </div>
-
-            <div className="dressPhotos">
-              <GlassPhoto photo={galleryPhotos[4]} className="glassPhoto dressPhoto dressPhotoOne" />
-              <GlassPhoto photo={galleryPhotos[5]} className="glassPhoto dressPhoto dressPhotoTwo" />
-            </div>
+            ))}
           </div>
+          <p className="dressHint">
+            Лаконичные силуэты, гладкие ткани, природные оттенки из палитры
+          </p>
         </div>
       </section>
 
       <section className="sectionShell">
         <div className="wishCard surfaceCard">
-          <IconShell>
-            <BottleIcon />
-          </IconShell>
           <p className="sectionTag">Пожелание</p>
           <blockquote>
             «Если вы захотите порадовать нас приятным комплиментом, вместо цветов мы с
@@ -369,13 +374,13 @@ function App() {
             </p>
 
             <div className="supportPhotos">
-              <GlassPhoto photo={galleryPhotos[6]} className="glassPhoto supportPhoto supportPhotoOne" />
+              <GlassPhoto photo={findPhotoByPath(mainPhotoAssets, '3') ?? galleryPhotos[6]} className="glassPhoto supportPhoto supportPhotoOne" />
               <GlassPhoto photo={galleryPhotos[7]} className="glassPhoto supportPhoto supportPhotoTwo" />
             </div>
           </div>
 
           <form className="rsvpForm surfaceCard" onSubmit={handleSubmit} autoComplete="on">
-            <label className="field fieldWide">
+            <label className="field">
               <span>ФИО</span>
               <input
                 name="fullName"
@@ -385,6 +390,18 @@ function App() {
                 placeholder="Ваше имя и фамилия"
                 required
               />
+            </label>
+
+            <label className="field">
+              <span>Алкогольные предпочтения</span>
+              <select name="alcohol" value={formData.alcohol} onChange={handleChange}>
+                <option value="">Выберите вариант</option>
+                <option value="Игристое">Игристое</option>
+                <option value="Вино">Вино</option>
+                <option value="Коктейли">Коктейли</option>
+                <option value="Безалкогольные напитки">Безалкогольные напитки</option>
+                <option value="Не употребляю алкоголь">Не употребляю алкоголь</option>
+              </select>
             </label>
 
             <label className="field fieldWide">
@@ -409,18 +426,6 @@ function App() {
               />
             </label>
 
-            <label className="field fieldWide">
-              <span>Алкогольные предпочтения</span>
-              <select name="alcohol" value={formData.alcohol} onChange={handleChange}>
-                <option value="">Выберите вариант</option>
-                <option value="Игристое">Игристое</option>
-                <option value="Вино">Вино</option>
-                <option value="Коктейли">Коктейли</option>
-                <option value="Безалкогольные напитки">Безалкогольные напитки</option>
-                <option value="Не употребляю алкоголь">Не употребляю алкоголь</option>
-              </select>
-            </label>
-
             <button
               className={`primaryButton submitButton ${submitState === 'loading' ? 'isLoading' : ''}`}
               type="submit"
@@ -442,15 +447,37 @@ function App() {
 }
 
 function fillPhotos(photos, minimumCount) {
+  if (photos.length === 0) {
+    return fallbackPhotos.slice(0, minimumCount)
+  }
+
   const result = [...photos]
-  let fallbackIndex = 0
+  let repeatIndex = 0
 
   while (result.length < minimumCount) {
-    result.push(fallbackPhotos[fallbackIndex % fallbackPhotos.length])
-    fallbackIndex += 1
+    result.push(photos[repeatIndex % photos.length])
+    repeatIndex += 1
   }
 
   return result.slice(0, minimumCount)
+}
+
+function findPhotoByPath(photos, query) {
+  return photos.find((photo) => photo.path.toLowerCase().includes(query.toLowerCase()))
+}
+
+function getPhotoAlt(path, index) {
+  const normalizedPath = path.toLowerCase()
+
+  if (normalizedPath.includes('жених')) {
+    return 'Портрет жениха'
+  }
+
+  if (normalizedPath.includes('невест')) {
+    return 'Портрет невесты'
+  }
+
+  return `Свадебная фотография ${index + 1}`
 }
 
 function getImageStyle(image) {

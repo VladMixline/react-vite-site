@@ -6,7 +6,6 @@ import process from 'node:process'
 const rootDir = process.cwd()
 const isWindows = process.platform === 'win32'
 const gitCommand = isWindows ? 'git.exe' : 'git'
-const ghCommand = isWindows ? 'gh.exe' : 'gh'
 const commitDelayMs = 3000
 const ignoredDirectories = new Set(['.git', 'node_modules', 'dist'])
 
@@ -20,6 +19,15 @@ function log(message) {
 
 function toText(value) {
   return value.toString().trim()
+}
+
+function buildGitIdentityEnv(name, email) {
+  return {
+    GIT_AUTHOR_NAME: name,
+    GIT_AUTHOR_EMAIL: email,
+    GIT_COMMITTER_NAME: name,
+    GIT_COMMITTER_EMAIL: email,
+  }
 }
 
 function isIgnored(filePath = '') {
@@ -63,41 +71,57 @@ function run(command, args, extraEnv = {}) {
   })
 }
 
-async function getGitIdentityEnv() {
-  const fallback = {
-    GIT_AUTHOR_NAME: 'Cursor Auto Save',
-    GIT_AUTHOR_EMAIL: 'cursor-auto-save@local',
-    GIT_COMMITTER_NAME: 'Cursor Auto Save',
-    GIT_COMMITTER_EMAIL: 'cursor-auto-save@local',
+async function readGitValue(args) {
+  const response = await run(gitCommand, args)
+
+  if (response.code !== 0) {
+    return ''
   }
 
-  try {
-    const response = await run(ghCommand, [
-      'api',
-      'user',
-      '--jq',
-      '[.login, (.id | tostring)] | join("|")',
-    ])
+  return response.stdout.trim()
+}
 
-    if (response.code !== 0 || !response.stdout.includes('|')) {
-      return fallback
-    }
+async function getGitIdentityEnv() {
+  const fallback = buildGitIdentityEnv(
+    'Cursor Auto Save',
+    'cursor-auto-save@local',
+  )
 
-    const [login, id] = response.stdout.split('|')
-    const email = `${id}+${login}@users.noreply.github.com`
+  const [configuredName, configuredEmail] = await Promise.all([
+    readGitValue(['config', '--get', 'user.name']),
+    readGitValue(['config', '--get', 'user.email']),
+  ])
 
-    return {
-      GIT_AUTHOR_NAME: login,
-      GIT_AUTHOR_EMAIL: email,
-      GIT_COMMITTER_NAME: login,
-      GIT_COMMITTER_EMAIL: email,
-    }
-  } catch {
+  if (configuredName && configuredEmail) {
+    return buildGitIdentityEnv(configuredName, configuredEmail)
+  }
+
+  const lastCommitIdentity = await readGitValue(['log', '-1', '--format=%an|%ae'])
+
+  if (!lastCommitIdentity.includes('|')) {
     return fallback
   }
+
+  const [name, email] = lastCommitIdentity.split('|')
+
+  if (!name || !email) {
+    return fallback
+  }
+
+  return buildGitIdentityEnv(name, email)
 }
 
 async function pushCurrentBranch() {
+  const origin = await run(gitCommand, ['remote', 'get-url', 'origin'])
+
+  if (origin.code !== 0) {
+    return {
+      code: 1,
+      stdout: '',
+      stderr: 'Remote "origin" is not configured.',
+    }
+  }
+
   const upstream = await run(gitCommand, [
     'rev-parse',
     '--abbrev-ref',

@@ -5,8 +5,10 @@
 .page {
   position: relative;
   min-height: 100vh;
-  padding: 18px 14px 82px;
+  min-height: 100dvh;
+  padding: 16px 12px 72px;
   overflow-x: clip;
+  color: var(--color-cream);
 }
 
 .pageBackdrop,
@@ -21,48 +23,72 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  filter: blur(10px) saturate(0.74) brightness(0.34);
-  transform: scale(1.08);
+  filter: blur(16px) saturate(0.82) brightness(1.16);
+  opacity: 0.5;
+  transform: scale(1.12);
 }
 
 .pageBackdrop.isFallback {
   background:
-    radial-gradient(circle at top, rgba(183, 169, 132, 0.14), transparent 28%),
-    linear-gradient(135deg, rgba(61, 38, 28, 0.9), rgba(84, 83, 60, 0.92));
+    radial-gradient(circle at top, rgba(255, 247, 236, 0.92), transparent 30%),
+    linear-gradient(135deg, rgba(244, 231, 217, 0.96), rgba(231, 216, 200, 0.94));
 }
 
 .pageVeil {
   z-index: 0;
   background:
-    linear-gradient(180deg, rgba(20, 14, 11, 0.76), rgba(20, 14, 11, 0.82)),
-    radial-gradient(circle at top left, rgba(142, 138, 100, 0.16), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(107, 74, 58, 0.14), transparent 36%);
+    linear-gradient(180deg, rgba(255, 251, 246, 0.8), rgba(247, 238, 228, 0.88)),
+    radial-gradient(circle at top left, rgba(235, 208, 176, 0.28), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(208, 186, 164, 0.18), transparent 36%);
 }
 
 .heroSection,
 .sectionShell {
   position: relative;
   z-index: 1;
-  width: min(1180px, 100%);
+  width: min(1240px, 100%);
   margin: 0 auto;
 }
 
 .sectionShell {
-  padding-top: 22px;
+  margin-top: 22px;
+  padding: 28px 18px;
+  overflow: hidden;
+  border: 1px solid rgba(171, 139, 112, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 248, 0.88), rgba(248, 239, 229, 0.8)),
+    rgba(255, 249, 242, 0.72);
+  box-shadow:
+    0 22px 48px rgba(128, 102, 79, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(14px);
+}
+
+.sectionShell::after {
+  content: '';
+  position: absolute;
+  inset: auto -10% -1px 42%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(194, 159, 121, 0.54), transparent);
+}
+
+.sectionShell:nth-of-type(2n) {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 247, 0.94), rgba(244, 235, 224, 0.82)),
+    rgba(255, 248, 241, 0.76);
 }
 
 .surfaceCard {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(238, 228, 211, 0.12);
-  border-radius: 30px;
+  border: 1px solid rgba(171, 139, 112, 0.18);
   background:
-    linear-gradient(180deg, rgba(255, 249, 241, 0.08), rgba(255, 249, 241, 0.03)),
-    rgba(38, 27, 22, 0.54);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(248, 240, 231, 0.92)),
+    rgba(255, 250, 244, 0.78);
   box-shadow:
-    0 24px 64px rgba(12, 9, 7, 0.28),
-    inset 0 1px 0 rgba(255, 249, 241, 0.08);
-  backdrop-filter: blur(18px);
+    0 16px 36px rgba(125, 100, 78, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
 }
 
 .surfaceCard::before {
@@ -70,36 +96,34 @@
   position: absolute;
   inset: 0 22px auto;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232, 220, 198, 0.34), transparent);
+  background: linear-gradient(90deg, transparent, rgba(194, 159, 121, 0.48), transparent);
 }
 
 .sectionTag {
   margin: 0;
-  font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.24em;
+  font-size: var(--step-0);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-tag);
   text-transform: uppercase;
   color: var(--color-muted-gold);
 }
 
 .sectionHeader,
 .sectionHeaderTight,
-.dressCopy,
 .mapPanel,
 .formSupport {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .sectionHeaderTight {
-  max-width: 700px;
+  max-width: none;
 }
 
 .sectionTitle,
 .heroNames,
 .heroIntro h1,
 .detailCard h3,
-.dressNote h3,
 .mapAddress h3,
 .wishCard blockquote {
   margin: 0;
@@ -123,28 +147,32 @@
 .heroLead,
 .detailCard p,
 .wishText,
-.dressNote p,
+.coordinatorStep p,
 .field span,
 .statusNote,
 .mapPanel .sectionText {
   margin: 0;
   font-size: var(--step-0);
-  line-height: 1.76;
+  line-height: var(--line-height-body);
   color: var(--color-soft-text);
 }
 
 .heroSection {
-  min-height: calc(100vh - 36px);
+  min-height: calc(100vh - 32px);
+  min-height: calc(100dvh - 32px);
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 28px;
-  padding: 28px 0 8px;
+  gap: 24px;
+  padding: 24px 0 10px;
   text-align: center;
 }
 
 .heroIntro {
-  width: min(760px, 100%);
+  width: 100%;
+  max-width: 780px;
+  box-sizing: border-box;
+  padding: 24px 6px 0;
   display: grid;
   justify-items: center;
 }
@@ -153,7 +181,7 @@
   width: 116px;
   height: 1px;
   margin: 16px auto 18px;
-  background: linear-gradient(90deg, transparent, rgba(236, 225, 206, 0.92), transparent);
+  background: linear-gradient(90deg, transparent, rgba(194, 159, 121, 0.8), transparent);
 }
 
 .heroGreeting {
@@ -163,14 +191,16 @@
 }
 
 .heroNames {
+  max-width: 10ch;
   font-size: clamp(2.2rem, 9vw, 4.5rem);
   line-height: 0.94;
   letter-spacing: 0.02em;
   color: var(--color-champagne);
+  text-wrap: balance;
 }
 
 .heroIntro h1 {
-  max-width: 15ch;
+  max-width: 14ch;
   margin-top: 16px;
   font-size: var(--step-4);
   line-height: 0.96;
@@ -179,13 +209,16 @@
 
 .heroLead {
   margin-top: 18px;
-  max-width: 56ch;
-  color: var(--color-cream);
+  color: var(--color-text-muted);
+}
+
+.heroLead,
+.heroText {
+  max-width: 62ch;
 }
 
 .heroText {
   margin-top: 14px;
-  max-width: 62ch;
 }
 
 .heroMeta {
@@ -211,13 +244,22 @@
   background: rgba(215, 193, 155, 0.72);
 }
 
-.heroActions,
+.heroReminder {
+  margin: 24px 0 0;
+  font-size: var(--step-0);
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
 .mapActions {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 12px;
   margin-top: 24px;
+}
+
+.mapActions {
+  align-items: stretch;
 }
 
 .primaryButton,
@@ -239,25 +281,23 @@
     opacity 180ms ease;
 }
 
-.heroActions > * {
-  width: min(100%, 260px);
-}
-
 .primaryButton {
-  color: #26170f;
-  background: linear-gradient(135deg, #d7c19b, #9a9971);
-  box-shadow: 0 18px 28px rgba(171, 153, 111, 0.18);
+  color: var(--color-button-text);
+  background: linear-gradient(135deg, #b78a66, var(--color-cocoa));
+  box-shadow: 0 14px 24px rgba(146, 110, 83, 0.16);
 }
 
 .secondaryButton {
   color: var(--color-cream);
-  border-color: rgba(238, 228, 211, 0.14);
-  background: rgba(255, 248, 240, 0.05);
+  border-color: rgba(171, 139, 112, 0.24);
+  background: rgba(255, 252, 247, 0.82);
 }
 
-.primaryButton:hover,
-.secondaryButton:hover {
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .primaryButton:hover,
+  .secondaryButton:hover {
+    transform: translateY(-2px);
+  }
 }
 
 .primaryButton:disabled {
@@ -266,7 +306,7 @@
 }
 
 .photoMarquee {
-  --marquee-gap: 14px;
+  --marquee-gap: 12px;
   width: 100%;
   overflow: hidden;
   padding-block: 8px;
@@ -278,7 +318,7 @@
   display: flex;
   gap: var(--marquee-gap);
   width: max-content;
-  animation: marqueeScroll 40s linear infinite;
+  animation: marqueeScroll 80s linear infinite;
   will-change: transform;
 }
 
@@ -289,20 +329,20 @@
 }
 
 .marqueePhoto {
-  flex: 0 0 clamp(180px, 52vw, 320px);
+  flex: 0 0 clamp(148px, 44vw, 320px);
   aspect-ratio: 4 / 5;
 }
 
 .glassPhoto {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(241, 232, 218, 0.12);
+  border: 1px solid rgba(171, 139, 112, 0.16);
   background:
-    linear-gradient(180deg, rgba(255, 250, 244, 0.1), rgba(255, 250, 244, 0.03)),
-    rgba(44, 32, 26, 0.22);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.48), rgba(248, 239, 229, 0.22)),
+    rgba(255, 250, 244, 0.48);
   box-shadow:
-    0 22px 56px rgba(12, 9, 7, 0.16),
-    inset 0 1px 0 rgba(255, 249, 241, 0.08);
+    0 12px 28px rgba(124, 97, 76, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62);
   backdrop-filter: blur(12px);
 }
 
@@ -311,8 +351,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(29, 20, 15, 0.12), rgba(29, 20, 15, 0.36)),
-    radial-gradient(circle at top, rgba(236, 225, 206, 0.08), transparent 42%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(92, 69, 56, 0.12)),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent 42%);
   pointer-events: none;
 }
 
@@ -325,71 +365,48 @@
 .glassPhoto img {
   display: block;
   object-fit: cover;
-  filter: saturate(0.84) brightness(0.88);
+  filter: saturate(0.94) brightness(1.02);
 }
 
 .glassPhoto.isFallback .glassPhotoPlaceholder {
   background:
-    radial-gradient(circle at top, rgba(221, 205, 177, 0.2), transparent 42%),
-    linear-gradient(145deg, rgba(96, 68, 54, 0.82), rgba(92, 90, 67, 0.8));
-}
-
-.ambientPhoto {
-  position: absolute;
-  opacity: 0.55;
-}
-
-.ambientPhoto1 {
-  top: 18px;
-  right: -10px;
-  width: min(38vw, 220px);
-  aspect-ratio: 4 / 5;
-}
-
-.ambientPhoto2 {
-  bottom: 42px;
-  right: 18px;
-  width: min(32vw, 180px);
-  aspect-ratio: 1 / 1;
-}
-
-.ambientPhoto3 {
-  bottom: 10px;
-  left: -8px;
-  width: min(30vw, 160px);
-  aspect-ratio: 4 / 5;
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.36), transparent 42%),
+    linear-gradient(145deg, rgba(215, 196, 178, 0.9), rgba(236, 224, 212, 0.92));
 }
 
 .detailGrid,
-.moodLayout,
-.coordinatorWrap,
+.coupleShowcase,
+.coordinatorLayout,
+.coordinatorAside,
 .mapLayout,
-.dressLayout,
 .formLayout,
-.photoMosaic,
-.paletteGrid,
-.dressVisual,
-.dressPhotos,
 .softPhotos,
 .supportPhotos {
   display: grid;
-  gap: 16px;
+  gap: 22px;
 }
 
 .detailGrid {
-  margin-top: 18px;
+  margin-top: 24px;
+}
+
+.mapLayout {
+  grid-template-columns: 1fr;
 }
 
 .detailCard {
-  padding: 24px 20px;
+  min-height: 100%;
+  padding: 24px 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(247, 238, 228, 0.94)),
+    rgba(255, 250, 245, 0.84);
 }
 
-.detailLabel,
-.paletteLabel {
+.detailLabel {
   margin: 0 0 10px;
   font-size: var(--step--1);
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--letter-spacing-label);
   text-transform: uppercase;
   color: var(--color-muted-gold);
 }
@@ -401,8 +418,9 @@
   height: 50px;
   margin-bottom: 18px;
   color: var(--color-champagne);
-  border: 1px solid rgba(238, 228, 211, 0.12);
-  background: rgba(255, 248, 240, 0.05);
+  border: 1px solid rgba(171, 139, 112, 0.18);
+  background: rgba(255, 250, 244, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .iconShell svg {
@@ -415,44 +433,117 @@
 }
 
 .detailCard p:last-child {
-  margin-top: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(171, 139, 112, 0.18);
 }
 
-.moodLayout {
-  align-items: start;
+.coupleShowcase {
+  margin-top: 24px;
 }
 
-.photoMosaic {
-  margin-top: 2px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: 150px;
+.personCard {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
 }
 
-.mosaicPhoto {
-  min-height: 100%;
+.personPhoto {
+  min-height: 260px;
+  aspect-ratio: 4 / 5;
 }
 
-.mosaicPhoto1 {
-  grid-row: span 2;
+.personContent {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 4px;
 }
 
-.mosaicPhoto4 {
-  grid-column: span 2;
+.personRole {
+  margin: 0;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-muted-gold);
+}
+
+.personCard h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--step-2);
+  font-weight: 400;
+  color: var(--color-cream);
+}
+
+.personCard p:last-child {
+  margin: 0;
+  color: var(--color-soft-text);
+  line-height: var(--line-height-body);
 }
 
 .coordinatorCard,
+.coordinatorMoments,
 .wishCard,
 .mapPanel,
-.dressNote,
-.paletteCard,
 .formSupport,
 .rsvpForm {
-  padding: 24px 20px;
+  padding: 24px 18px;
 }
 
 .coordinatorCard {
   display: grid;
+  gap: 24px;
+}
+
+.coordinatorIntro {
+  display: grid;
   gap: 18px;
+}
+
+.coordinatorText {
+  display: grid;
+  gap: 14px;
+}
+
+.coordinatorText .sectionTitle {
+  line-height: 1.24;
+  letter-spacing: 0.02em;
+}
+
+.coordinatorMoments {
+  display: grid;
+  gap: 16px;
+}
+
+.coordinatorSteps {
+  display: grid;
+  gap: 16px;
+}
+
+.coordinatorStep {
+  display: grid;
+  gap: 8px;
+}
+
+.coordinatorStep + .coordinatorStep {
+  padding-top: 16px;
+  border-top: 1px solid rgba(171, 139, 112, 0.18);
+}
+
+.coordinatorStepTitle {
+  margin: 0;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-muted-gold);
+}
+
+.softPhotos {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
 }
 
 .sidePhoto {
@@ -460,19 +551,20 @@
 }
 
 .sidePhotoBottom {
-  margin-left: 20%;
+  margin-top: 28px;
 }
 
 .mapFrame {
-  padding: 10px;
+  padding: 12px;
+  background: rgba(255, 252, 247, 0.82);
 }
 
 .mapFrame iframe {
   display: block;
   width: 100%;
-  min-height: 340px;
+  min-height: 280px;
   border: 0;
-  filter: saturate(0.74) sepia(0.12);
+  filter: saturate(0.88) sepia(0.06) brightness(1.02);
 }
 
 .mapAddress {
@@ -482,7 +574,7 @@
 .mapAddress p {
   margin: 0 0 8px;
   font-size: var(--step--1);
-  letter-spacing: 0.16em;
+  letter-spacing: var(--letter-spacing-label);
   text-transform: uppercase;
   color: var(--color-muted-gold);
 }
@@ -492,60 +584,80 @@
   line-height: 1.08;
 }
 
-.dressNote h3 {
-  font-size: var(--step-1);
+/* Dress Code */
+.sectionShell--dress {
+  padding: 24px 18px;
 }
 
-.dressList {
+.dressBlock {
   display: grid;
-  gap: 10px;
-  margin: 18px 0 0;
-  padding-left: 18px;
+  gap: 14px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.dressTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--step-2);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-cream);
+}
+
+.dressText {
+  margin: 0;
+  font-size: var(--step-0);
+  line-height: var(--line-height-body);
   color: var(--color-soft-text);
 }
 
-.paletteGrid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 14px;
-}
-
-.paletteSwatch {
+.dressPalette {
   display: grid;
-  gap: 10px;
-  align-content: start;
-  padding: 14px;
-  border: 1px solid rgba(238, 228, 211, 0.1);
-  background: rgba(255, 248, 240, 0.05);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 10px;
+  margin-top: 4px;
 }
 
-.swatchTone {
-  width: 100%;
-  height: 56px;
-  border: 1px solid rgba(255, 248, 240, 0.16);
-  box-shadow: inset 0 1px 0 rgba(255, 250, 244, 0.24);
+.dressSwatch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
 }
 
-.paletteSwatch strong {
-  color: var(--color-cream);
-  font-size: var(--step--1);
+.dressSwatchTone {
+  width: clamp(36px, 11vw, 46px);
+  height: clamp(36px, 11vw, 46px);
+  border: 1px solid rgba(171, 139, 112, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dressSwatchName {
+  font-size: clamp(0.65rem, 0.6rem + 0.4vw, 0.8rem);
   font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--color-cream);
+  text-align: left;
+  line-height: 1.25;
+  max-width: none;
 }
 
-.dressPhotos {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-}
-
-.dressPhoto {
-  min-height: 180px;
-}
-
-.dressPhotoTwo {
-  margin-top: 26px;
+.dressHint {
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(171, 139, 112, 0.18);
+  font-size: var(--step--1);
+  font-style: italic;
+  color: var(--color-text-faint);
 }
 
 .wishCard {
   display: grid;
   gap: 18px;
+  justify-items: center;
+  text-align: center;
 }
 
 .wishCard blockquote {
@@ -553,9 +665,6 @@
   line-height: 1.08;
 }
 
-.wishText {
-  max-width: 56ch;
-}
 
 .formSupport {
   display: grid;
@@ -563,16 +672,16 @@
 }
 
 .supportPhotos {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   margin-top: 8px;
 }
 
 .supportPhoto {
-  min-height: 150px;
+  min-height: 200px;
 }
 
 .supportPhotoTwo {
-  margin-top: 24px;
+  margin-top: 0;
 }
 
 .rsvpForm {
@@ -593,9 +702,9 @@
 .field textarea,
 .field select {
   width: 100%;
-  padding: 16px 16px;
-  border: 1px solid rgba(239, 228, 211, 0.12);
-  background: rgba(255, 248, 240, 0.05);
+  padding: 14px 16px;
+  border: 1px solid rgba(171, 139, 112, 0.24);
+  background: rgba(255, 254, 251, 0.92);
   color: var(--color-cream);
   outline: none;
   transition:
@@ -611,15 +720,15 @@
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: rgba(232, 223, 210, 0.52);
+  color: var(--color-placeholder);
 }
 
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  border-color: rgba(215, 193, 155, 0.56);
-  background: rgba(255, 248, 240, 0.08);
-  box-shadow: 0 0 0 4px rgba(215, 193, 155, 0.08);
+  border-color: rgba(183, 138, 102, 0.48);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 0 0 4px rgba(194, 159, 121, 0.12);
 }
 
 .submitButton {
@@ -629,22 +738,23 @@
 
 .statusNote {
   padding: 14px 16px;
-  border: 1px solid rgba(239, 228, 211, 0.1);
-  background: rgba(255, 248, 240, 0.05);
+  border: 1px solid rgba(171, 139, 112, 0.18);
+  background: rgba(255, 252, 247, 0.86);
 }
 
 .statusNoteSuccess {
-  border-color: rgba(168, 184, 125, 0.24);
-  color: #e9e3d4;
+  border-color: rgba(138, 164, 124, 0.28);
+  color: var(--color-status-success);
 }
 
 .statusNoteFallback {
-  border-color: rgba(215, 193, 155, 0.24);
-  color: #efe6d7;
+  border-color: rgba(194, 159, 121, 0.3);
+  color: var(--color-status-fallback);
 }
 
 .statusNoteError {
   border-color: rgba(190, 132, 112, 0.28);
+  color: var(--color-status-error);
 }
 
 @keyframes marqueeScroll {
@@ -680,8 +790,7 @@
 .secondaryButton,
 .iconShell,
 .mapFrame iframe,
-.paletteSwatch,
-.swatchTone,
+.dressSwatchTone,
 .field input,
 .field textarea,
 .field select,
@@ -709,26 +818,70 @@
   }
 }
 
+@media (min-width: 520px) {
+  .dressPalette {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .supportPhotos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .supportPhoto {
+    min-height: 150px;
+  }
+
+  .supportPhotoTwo {
+    margin-top: 24px;
+  }
+}
+
+@media (min-width: 640px) {
+  .detailGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 720px) {
   .page {
     padding: 22px 18px 94px;
   }
 
+  .sectionShell {
+    padding: 34px 24px;
+  }
+
+  .sectionShell--dress {
+    padding: 28px 24px;
+  }
+
+  .dressBlock {
+    gap: 18px;
+    max-width: 720px;
+  }
+
+  .dressPalette {
+    gap: 14px;
+  }
+
+  .dressSwatchTone {
+    width: 40px;
+    height: 40px;
+  }
+
   .heroSection {
-    gap: 34px;
-    padding: 30px 0 12px;
+    gap: 36px;
+    padding: 34px 0 12px;
   }
 
-  .heroActions > * {
-    width: auto;
-    min-width: 220px;
+  .heroIntro {
+    padding-top: 32px;
   }
 
-  .heroActions,
   .mapActions {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .photoMarquee {
@@ -736,32 +889,59 @@
   }
 
   .marqueePhoto {
-    flex-basis: clamp(220px, 32vw, 340px);
+    flex-basis: clamp(196px, 30vw, 340px);
   }
 
-  .detailGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .coupleShowcase {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .moodLayout,
-  .mapLayout,
-  .dressLayout,
-  .formLayout {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  .coordinatorLayout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.84fr);
     align-items: start;
   }
 
-  .coordinatorWrap {
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.58fr);
-    align-items: center;
+  .coordinatorIntro {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
   }
 
-  .photoMosaic {
-    grid-auto-rows: 180px;
+  .softPhotos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidePhotoBottom {
+    margin-top: 18px;
+    margin-left: 14%;
+  }
+
+  .personPhoto {
+    min-height: 340px;
   }
 
   .supportPhotos {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  }
+
+  .supportPhotoTwo {
+    margin-top: 30px;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    padding: 16px;
+  }
+
+  .mapFrame iframe {
+    min-height: 340px;
+  }
+}
+
+@media (min-width: 960px) {
+  .formLayout {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: start;
   }
 }
 
@@ -771,39 +951,38 @@
   }
 
   .sectionShell {
-    padding-top: 34px;
+    padding: 42px 34px;
+  }
+
+  .sectionShell--dress {
+    padding: 32px 32px;
+  }
+
+  .dressBlock {
+    max-width: 720px;
+  }
+
+  .dressTitle {
+    font-size: var(--step-3);
   }
 
   .heroSection {
     min-height: calc(100vh - 56px);
-    gap: 40px;
-    padding: 34px 0 18px;
+    min-height: calc(100dvh - 56px);
+    gap: 46px;
+    padding: 46px 0 20px;
   }
 
   .marqueePhoto {
-    flex-basis: clamp(240px, 24vw, 360px);
+    flex-basis: clamp(232px, 24vw, 360px);
   }
 
-  .photoMosaic {
-    grid-template-columns: 1.05fr 0.95fr 0.92fr;
-    grid-auto-rows: 190px;
-  }
-
-  .mosaicPhoto1 {
-    grid-column: 1;
-    grid-row: span 2;
-  }
-
-  .mosaicPhoto4 {
-    grid-column: 2 / 4;
-  }
-
-  .dressLayout {
-    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-  }
-
-  .paletteGrid {
+  .detailGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .coordinatorLayout {
+    grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
   }
 
   .rsvpForm {
@@ -814,5 +993,17 @@
   .submitButton,
   .statusNote {
     grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  .personCard {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 22px;
+    align-items: stretch;
+  }
+
+  .personPhoto {
+    min-height: 100%;
   }
 }
