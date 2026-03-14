@@ -1059,6 +1059,13 @@
   }
 }
 
+@media (max-width: 519px) {
+  .dressPalette {
+    grid-auto-flow: column;
+    grid-template-rows: repeat(4, max-content);
+  }
+}
+
 @media (min-width: 520px) {
   .dressPalette {
     grid-template-columns: repeat(4, max-content);
