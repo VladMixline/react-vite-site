@@ -101,6 +101,7 @@
 
 .sectionTag {
   margin: 0;
+  font-family: var(--font-body);
   font-size: var(--step-0);
   font-weight: 700;
   letter-spacing: var(--letter-spacing-tag);
@@ -120,15 +121,34 @@
   max-width: none;
 }
 
+.sectionTag,
+.heroGreeting,
+.heroReminder,
+.heroCountdownLabel,
+.primaryButton,
+.secondaryButton,
+.detailLabel,
+.personRole,
+.coordinatorStepTitle,
+.mapAddress p,
+.dressSwatchName,
+.field span {
+  font-family: var(--font-body);
+}
+
+.heroDateColumn,
+.heroMainDate,
+.heroAmpersand,
 .sectionTitle,
 .heroNames,
 .heroIntro h1,
+.heroCountdownValue,
 .detailCard h3,
 .mapAddress h3,
 .wishCard blockquote {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--color-cream);
 }
 
@@ -162,93 +182,212 @@
   min-height: calc(100dvh - 32px);
   display: grid;
   align-content: center;
-  justify-items: center;
-  gap: 24px;
+  gap: 20px;
   padding: 24px 0 10px;
-  text-align: center;
 }
 
 .heroIntro {
+  --hero-right-bleed: 20px;
   width: 100%;
-  max-width: 780px;
+  max-width: none;
   box-sizing: border-box;
-  padding: 24px 6px 0;
+  padding: 24px 20px;
   display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 22px;
+  align-items: stretch;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(248, 239, 229, 0.88)),
+    rgba(255, 250, 244, 0.84);
+}
+
+.heroRail {
+  display: grid;
+  grid-template-rows: auto 1fr;
   justify-items: center;
+  gap: 20px;
 }
 
 .heroDivider {
-  width: 116px;
-  height: 1px;
-  margin: 16px auto 18px;
-  background: linear-gradient(90deg, transparent, rgba(194, 159, 121, 0.8), transparent);
+  width: 1px;
+  min-height: clamp(180px, 35vw, 360px);
+  background: linear-gradient(180deg, rgba(194, 159, 121, 0), rgba(194, 159, 121, 0.92), rgba(194, 159, 121, 0));
+}
+
+.heroDateColumn {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  justify-items: center;
+  font-size: clamp(2.35rem, 9vw, 4.5rem);
+  line-height: 0.78;
+  letter-spacing: 0.08em;
+  color: var(--color-cream);
+  font-variant-numeric: lining-nums;
+}
+
+.heroDateColumn span {
+  display: block;
+}
+
+.heroContent {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding-top: 2px;
+  text-align: left;
+}
+
+.heroVisual {
+  grid-column: 2;
+  align-self: stretch;
+  justify-self: stretch;
+  width: calc(100% + var(--hero-right-bleed));
+  min-height: clamp(320px, 78vw, 640px);
+  margin-right: calc(var(--hero-right-bleed) * -1);
 }
 
 .heroGreeting {
-  margin: 0 0 8px;
-  font-size: var(--step-0);
+  margin: 2px 0 0;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--color-soft-text);
 }
 
+.heroNamesGroup {
+  display: grid;
+  gap: 2px;
+  margin-top: 4px;
+}
+
 .heroNames {
-  max-width: 10ch;
-  font-size: clamp(2.2rem, 9vw, 4.5rem);
-  line-height: 0.94;
-  letter-spacing: 0.02em;
-  color: var(--color-champagne);
-  text-wrap: balance;
+  max-width: none;
+  font-size: clamp(2.9rem, 12vw, 5.3rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  color: var(--color-cream);
+}
+
+.heroNameSecondary {
+  padding-left: clamp(0.8rem, 5vw, 3rem);
+}
+
+.heroAmpersand {
+  margin: -0.2rem 0 -0.05rem;
+  width: fit-content;
+  margin-left: clamp(2.4rem, 11vw, 5.2rem);
+  padding-left: 0;
+  font-family: var(--font-script);
+  font-size: clamp(2rem, 6.2vw, 3.9rem);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--color-muted-gold);
 }
 
 .heroIntro h1 {
   max-width: 14ch;
-  margin-top: 16px;
-  font-size: var(--step-4);
-  line-height: 0.96;
+  margin-top: 8px;
+  font-size: clamp(1.55rem, 4.9vw, 2.7rem);
+  line-height: 1.06;
+  letter-spacing: 0.01em;
+  color: var(--color-cream);
   text-wrap: balance;
 }
 
-.heroLead {
-  margin-top: 18px;
-  color: var(--color-text-muted);
-}
-
-.heroLead,
-.heroText {
-  max-width: 62ch;
-}
-
-.heroText {
-  margin-top: 14px;
-}
-
-.heroMeta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 18px;
-  margin-top: 22px;
-}
-
-.heroMeta span {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: var(--step--1);
-  color: var(--color-cream);
-}
-
-.heroMeta span::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background: rgba(215, 193, 155, 0.72);
+.heroMainDate {
+  margin-top: 4px;
+  font-size: clamp(1.85rem, 5.2vw, 3.2rem);
+  line-height: 0.94;
+  letter-spacing: 0.03em;
+  color: var(--color-champagne);
+  font-variant-numeric: lining-nums;
 }
 
 .heroReminder {
-  margin: 24px 0 0;
-  font-size: var(--step-0);
-  font-style: italic;
-  color: var(--color-text-muted);
+  margin: 10px 0 0;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-muted-gold);
+}
+
+.heroCountdown {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(12px, 3.75vw, 24px);
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 4px;
+}
+
+.heroCountdownItem {
+  display: grid;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(171, 139, 112, 0.18);
+  flex: 0 0 auto;
+  min-width: 2.2em;
+  justify-items: end;
+  text-align: right;
+}
+
+.heroCountdownItem .heroCountdownValue {
+  min-width: 1.2em;
+  overflow: visible;
+}
+
+.heroCountdownValue {
+  font-size: clamp(1.6rem, 6vw, 2.8rem);
+  line-height: 0.88;
+  letter-spacing: 0.03em;
+  color: var(--color-champagne);
+  font-variant-numeric: lining-nums;
+  min-width: 1.2em;
+  overflow: visible;
+}
+
+.heroCountdownLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-soft-text);
+}
+
+.heroPhoto {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.heroPhoto::after {
+  display: none;
+}
+
+.heroPhoto img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  object-fit: contain;
+  object-position: right center;
+  filter: saturate(0.88) contrast(1.02);
 }
 
 .mapActions {
@@ -272,6 +411,7 @@
   border: 1px solid transparent;
   font-size: var(--step--1);
   font-weight: 700;
+  letter-spacing: 0.04em;
   text-align: center;
   transition:
     transform 180ms ease,
@@ -397,6 +537,8 @@
 .detailCard {
   min-height: 100%;
   padding: 24px 18px;
+  display: grid;
+  align-content: start;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(247, 238, 228, 0.94)),
     rgba(255, 250, 245, 0.84);
@@ -411,12 +553,24 @@
   color: var(--color-muted-gold);
 }
 
+.detailHeading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.detailHeadingText {
+  display: grid;
+  gap: 6px;
+}
+
 .iconShell {
   display: inline-grid;
   place-items: center;
   width: 50px;
   height: 50px;
-  margin-bottom: 18px;
+  margin-bottom: 0;
   color: var(--color-champagne);
   border: 1px solid rgba(171, 139, 112, 0.18);
   background: rgba(255, 250, 244, 0.82);
@@ -430,12 +584,59 @@
 
 .detailCard h3 {
   font-size: var(--step-2);
+  margin: 0;
 }
 
-.detailCard p:last-child {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(171, 139, 112, 0.18);
+.detailDivider {
+  grid-column: 1 / -1;
+  height: 1px;
+  margin: 14px 0 0;
+  background: linear-gradient(90deg, transparent, rgba(194, 159, 121, 0.3), transparent);
+}
+
+.detailMetaText {
+  margin: 14px 0 0;
+  font-size: var(--step-0);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.detailCaption {
+  margin-top: 14px;
+  padding-top: 0;
+}
+
+.detailSchedule {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 0;
+}
+
+.detailScheduleItem {
+  display: grid;
+  grid-template-columns: minmax(62px, auto) minmax(0, 1fr);
+  gap: 10px 16px;
+  align-items: start;
+}
+
+.detailScheduleTime,
+.detailScheduleTitle {
+  margin: 0;
+}
+
+.detailScheduleTime {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-cream);
+}
+
+.detailScheduleTitle {
+  font-size: var(--step-0);
+  line-height: 1.45;
+  color: var(--color-text-muted);
 }
 
 .coupleShowcase {
@@ -444,48 +645,83 @@
 
 .personCard {
   display: grid;
-  gap: 16px;
-  padding: 16px;
+  justify-items: center;
+  gap: 18px;
+  padding: 0;
+  text-align: center;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.personCard::before {
+  display: none;
 }
 
 .personPhoto {
-  min-height: 260px;
-  aspect-ratio: 4 / 5;
+  width: min(100%, 320px);
+  min-height: auto;
+  aspect-ratio: 1;
+}
+
+.personPortrait {
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 252, 247, 0.58);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.personPortrait::after {
+  display: none;
+}
+
+.personPortrait img,
+.personPortrait .glassPhotoPlaceholder {
+  border-radius: 50%;
+}
+
+.personPortrait img {
+  filter: none;
+}
+
+.personPortraitGroom img {
+  object-position: 56% 22%;
 }
 
 .personContent {
   display: grid;
   align-content: start;
-  gap: 12px;
-  padding: 4px;
+  justify-items: center;
+  gap: 8px;
+  padding: 0;
 }
 
 .personRole {
   margin: 0;
-  font-size: var(--step--1);
-  font-weight: 700;
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-muted-gold);
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 500;
+  line-height: 0.96;
+  color: var(--color-champagne);
 }
 
 .personCard h3 {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: var(--step-2);
-  font-weight: 400;
-  color: var(--color-cream);
-}
-
-.personCard p:last-child {
-  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--color-soft-text);
-  line-height: var(--line-height-body);
 }
 
 .coordinatorCard,
 .coordinatorMoments,
 .wishCard,
+.dressCard,
 .mapPanel,
 .formSupport,
 .rsvpForm {
@@ -574,6 +810,7 @@
 .mapAddress p {
   margin: 0 0 8px;
   font-size: var(--step--1);
+  font-weight: 700;
   letter-spacing: var(--letter-spacing-label);
   text-transform: uppercase;
   color: var(--color-muted-gold);
@@ -585,84 +822,57 @@
 }
 
 /* Dress Code */
-.sectionShell--dress {
-  padding: 24px 18px;
-}
-
-.dressBlock {
+.dressCard {
   display: grid;
   gap: 14px;
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.dressTitle {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: var(--step-2);
-  font-weight: 400;
-  line-height: 1.2;
-  color: var(--color-cream);
-}
-
-.dressText {
-  margin: 0;
-  font-size: var(--step-0);
-  line-height: var(--line-height-body);
-  color: var(--color-soft-text);
+  justify-items: start;
 }
 
 .dressPalette {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 10px;
+  grid-template-columns: repeat(2, max-content);
+  gap: 6px 6px;
   margin-top: 4px;
+  justify-content: start;
+  justify-items: center;
+  align-items: center;
 }
 
 .dressSwatch {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  min-width: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 .dressSwatchTone {
-  width: clamp(36px, 11vw, 46px);
-  height: clamp(36px, 11vw, 46px);
+  width: 108px;
+  height: 108px;
+  flex-shrink: 0;
   border: 1px solid rgba(171, 139, 112, 0.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
 }
 
 .dressSwatchName {
-  font-size: clamp(0.65rem, 0.6rem + 0.4vw, 0.8rem);
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--color-cream);
-  text-align: left;
-  line-height: 1.25;
-  max-width: none;
-}
-
-.dressHint {
-  margin: 18px 0 0;
-  padding-top: 16px;
-  border-top: 1px solid rgba(171, 139, 112, 0.18);
   font-size: var(--step--1);
-  font-style: italic;
-  color: var(--color-text-faint);
+  font-weight: 500;
+  color: var(--color-soft-text);
+  line-height: 1.3;
 }
 
 .wishCard {
   display: grid;
   gap: 18px;
-  justify-items: center;
-  text-align: center;
+  justify-items: start;
+  text-align: left;
 }
 
 .wishCard blockquote {
-  font-size: clamp(1.95rem, 6vw, 3.3rem);
-  line-height: 1.08;
+  font-size: var(--step-2);
+  font-weight: 500;
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-align: center;
+  justify-self: stretch;
 }
 
 
@@ -674,6 +884,10 @@
 .supportPhotos {
   grid-template-columns: 1fr;
   margin-top: 8px;
+}
+
+.supportPhotosSingle {
+  width: 100%;
 }
 
 .supportPhoto {
@@ -716,6 +930,34 @@
 .field textarea {
   min-height: 120px;
   resize: vertical;
+}
+
+.alcoholCheckboxes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 520px) {
+  .alcoholCheckboxes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: var(--step--1);
+  color: var(--color-cream);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: rgba(171, 139, 112, 0.8);
+  cursor: pointer;
 }
 
 .field input::placeholder,
@@ -790,7 +1032,6 @@
 .secondaryButton,
 .iconShell,
 .mapFrame iframe,
-.dressSwatchTone,
 .field input,
 .field textarea,
 .field select,
@@ -820,11 +1061,16 @@
 
 @media (min-width: 520px) {
   .dressPalette {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, max-content);
+    justify-content: start;
   }
 
   .supportPhotos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .supportPhotos.supportPhotosSingle {
+    grid-template-columns: 1fr;
   }
 
   .supportPhoto {
@@ -851,22 +1097,13 @@
     padding: 34px 24px;
   }
 
-  .sectionShell--dress {
-    padding: 28px 24px;
-  }
-
-  .dressBlock {
-    gap: 18px;
-    max-width: 720px;
-  }
-
   .dressPalette {
-    gap: 14px;
+    gap: 6px 6px;
   }
 
   .dressSwatchTone {
-    width: 40px;
-    height: 40px;
+    width: 108px;
+    height: 108px;
   }
 
   .heroSection {
@@ -875,7 +1112,33 @@
   }
 
   .heroIntro {
-    padding-top: 32px;
+    --hero-right-bleed: 32px;
+    grid-template-columns: 90px minmax(0, 0.94fr) minmax(240px, 0.88fr);
+    gap: 26px;
+    padding: 36px 32px;
+  }
+
+  .heroContent {
+    gap: 14px;
+    grid-column: 2;
+    padding-right: 6px;
+  }
+
+  .heroRail {
+    gap: 22px;
+  }
+
+  .heroVisual {
+    grid-column: 3;
+    align-self: stretch;
+    width: 100%;
+    max-width: none;
+    min-height: 100%;
+  }
+
+  .heroCountdown {
+    max-width: 360px;
+    gap: 24px;
   }
 
   .mapActions {
@@ -921,6 +1184,10 @@
 
   .supportPhotos {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  }
+
+  .supportPhotos.supportPhotosSingle {
+    grid-template-columns: 1fr;
   }
 
   .supportPhotoTwo {
@@ -973,12 +1240,48 @@
     padding: 46px 0 20px;
   }
 
+  .heroIntro {
+    --hero-right-bleed: 46px;
+    grid-template-columns: 110px minmax(0, 0.82fr) minmax(360px, 1fr);
+    gap: 30px;
+    padding: 42px 46px;
+  }
+
+  .heroDivider {
+    min-height: 380px;
+  }
+
+  .heroContent {
+    max-width: 560px;
+  }
+
+  .heroIntro h1 {
+    max-width: 15ch;
+    font-size: clamp(1.6rem, 2.8vw, 2.45rem);
+  }
+
+  .heroNameSecondary {
+    padding-left: 4rem;
+  }
+
+  .heroAmpersand {
+    margin-left: 5rem;
+  }
+
+  .heroCountdown {
+    max-width: 360px;
+  }
+
+  .heroVisual {
+    min-height: 100%;
+  }
+
   .marqueePhoto {
     flex-basis: clamp(232px, 24vw, 360px);
   }
 
   .detailGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   }
 
   .coordinatorLayout {
@@ -998,12 +1301,6 @@
 
 @media (min-width: 1200px) {
   .personCard {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: 22px;
-    align-items: stretch;
-  }
-
-  .personPhoto {
-    min-height: 100%;
   }
 }

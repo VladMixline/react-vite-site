@@ -11,10 +11,15 @@ if (!botToken) {
 }
 
 const response = await fetch(`https://api.telegram.org/bot${botToken}/getUpdates`)
-const payload = await response.json()
+const payload = await response.json().catch(() => null)
 
 if (!response.ok || !payload?.ok) {
   console.error('Failed to fetch bot updates from Telegram.')
+  if (payload?.description) {
+    console.error('Telegram API:', payload.description)
+  } else if (!response.ok) {
+    console.error('HTTP status:', response.status)
+  }
   process.exit(1)
 }
 

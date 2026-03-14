@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 const backImages = Object.values(
@@ -25,34 +25,55 @@ const mainPhotoAssets = Object.entries(
     return nameA.localeCompare(nameB, undefined, { numeric: true })
   })
 
-const coupleNames = 'Владислав & Алена Чарыковы'
+const carouselPhotoAssets = Object.entries(
+  import.meta.glob('./fotos/карусель/*.{png,jpg,jpeg,webp,avif,PNG,JPG,JPEG,WEBP,AVIF}', {
+    eager: true,
+    import: 'default',
+  }),
+)
+  .map(([path, source], index) => ({
+    path,
+    src: source,
+    alt: `Фотография карусели ${index + 1}`,
+  }))
+  .sort((a, b) => {
+    const nameA = a.path.replace(/^.*[/\\]/, '')
+    const nameB = b.path.replace(/^.*[/\\]/, '')
+    return nameA.localeCompare(nameB, undefined, { numeric: true })
+  })
+
+const coupleSignature = 'Владислав & Алена Чарыковы'
 const groomName = 'Владислав'
 const brideName = 'Алена'
 const telegramUsername = 'zhyk04'
+const eventDate = '01.08.2026'
+const weddingStart = new Date(2026, 7, 1, 16, 0, 0)
+const heroDateParts = eventDate
+  .split('.')
+  .map((part, index) => (index === 2 ? part.slice(-2) : part))
+const venueName = 'Банкетный зал PLES'
 const venueAddress = 'Тамбов, ул. Маршала Малиновского, 39'
 const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(venueAddress)}&t=&z=16&ie=UTF8&iwloc=&output=embed`
 const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venueAddress)}`
-const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venueAddress)}`
 
 const fallbackPhotos = Array.from({ length: 8 }, () => ({ src: null, alt: '' }))
 
 const eventDetails = [
   {
-    title: 'Город',
-    value: 'Тамбов',
+    title: '',
+    value: venueName,
+    meta: venueAddress,
     caption: 'Именно здесь мы хотим прожить этот красивый вечер рядом с самыми близкими людьми.',
     Icon: PlaceIcon,
   },
   {
-    title: 'Площадка',
-    value: 'банкетный зал PLES',
-    caption: 'Элегантное пространство с мягкой атмосферой, где особенно хочется праздновать неспешно и тепло.',
-    Icon: VenueIcon,
-  },
-  {
-    title: 'Время',
-    value: 'к 16:00',
-    caption: 'Будем рады, если вы приедете немного заранее, чтобы спокойно оказаться в welcome-зоне.',
+    title: '',
+    value: 'Свадебное расписание',
+    schedule: [
+      { time: '16:00', title: 'welcome' },
+      { time: '16:30', title: 'выездная регистрация брака' },
+      { time: '17:30', title: 'банкет' },
+    ],
     Icon: TimeIcon,
   },
 ]
@@ -70,29 +91,53 @@ const paletteColors = [
 
 const coordinatorMoments = [
   {
-    title: 'Перед началом',
-    text: 'Если вы приедете немного раньше, Ирина поможет спокойно разместиться и подскажет, где начинается welcome.',
-  },
-  {
     title: 'Во время сбора гостей',
     text: 'Она направит к нужной зоне, поможет сориентироваться на площадке и подскажет по ходу вечера.',
   },
   {
     title: 'В любой момент праздника',
-    text: 'Если понадобится решить организационный вопрос без суеты, можно смело ориентироваться на Ирину.',
+    text: 'Если понадобится решить организационный вопрос, можно обратиться к Ирине.',
   },
+  {
+    title: 'Вопросы по организации',
+    text: 'Если вы планируете подготовить сюрприз — обращайтесь к Ирине в телеграмм: @irina_coordinator',
+  },
+]
+
+const alcoholOptions = [
+  'Вино игристое',
+  'Вино красное',
+  'Вино белое',
+  'Самогон',
+  'Коньяк',
+  'Водка',
+  'Ликер',
+  'Безалкогольные напитки',
 ]
 
 const initialFormState = {
   fullName: '',
-  taste: '',
   allergies: '',
-  alcohol: '',
+  alcohol: [],
+}
+
+function getWeddingCountdown() {
+  const remainingMs = Math.max(weddingStart.getTime() - Date.now(), 0)
+  const totalSeconds = Math.floor(remainingMs / 1000)
+
+  return {
+    days: String(Math.floor(totalSeconds / 86400)).padStart(2, '0'),
+    hours: String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0'),
+    minutes: String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0'),
+    seconds: String(totalSeconds % 60).padStart(2, '0'),
+  }
 }
 
 function App() {
   const backgroundPhoto = backImages[0] ?? null
   const galleryPhotos = fillPhotos(mainPhotoAssets, 8)
+  const carouselPhotos = fillPhotos(carouselPhotoAssets, 8)
+  const invitationPhoto = findPhotoByPath(mainPhotoAssets, 'приглашение') ?? galleryPhotos[2]
 
   const groomPhoto = findPhotoByPath(mainPhotoAssets, 'жених') ?? galleryPhotos[0]
   const bridePhoto = findPhotoByPath(mainPhotoAssets, 'невест') ?? galleryPhotos[1] ?? galleryPhotos[0]
@@ -116,6 +161,17 @@ function App() {
   const [formData, setFormData] = useState(initialFormState)
   const [submitState, setSubmitState] = useState('idle')
   const [submitMessage, setSubmitMessage] = useState('')
+  const [countdown, setCountdown] = useState(() => getWeddingCountdown())
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setCountdown(getWeddingCountdown())
+    }, 1000)
+
+    return () => {
+      window.clearInterval(intervalId)
+    }
+  }, [])
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -126,6 +182,16 @@ function App() {
       ...current,
       [name]: value,
     }))
+  }
+
+  function handleAlcoholToggle(option) {
+    setSubmitState('idle')
+    setSubmitMessage('')
+    setFormData((current) => {
+      const prev = current.alcohol
+      const next = prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option]
+      return { ...current, alcohol: next }
+    })
   }
 
   async function handleSubmit(event) {
@@ -171,46 +237,62 @@ function App() {
       <div className="pageVeil" aria-hidden="true" />
 
       <section className="heroSection">
-        <div className="heroIntro">
-          <p className="sectionTag">Wedding Invitation</p>
-          <div className="heroDivider" aria-hidden="true" />
-          <p className="heroGreeting">Дорогие родные и друзья,</p>
-          <p className="heroNames">{coupleNames}</p>
-          <h1>С любовью приглашаем вас разделить с нами день, который мы будем помнить всегда.</h1>
-          <p className="heroLead">
-            Нам очень хочется прожить этот вечер среди самых близких людей, в атмосфере
-            тепла, спокойной красоты и настоящей семейной нежности.
-          </p>
-          <p className="heroText">
-            Будем счастливы, если вы станете частью нашего праздника, наполненного
-            объятиями, искренними улыбками, мягким светом и тем особенным чувством, когда
-            рядом находятся любимые люди.
-          </p>
-
-          <div className="heroMeta">
-            <span>Тамбов</span>
-            <span>банкетный зал PLES</span>
-            <span>сбор гостей к 16:00</span>
+        <div className="heroIntro surfaceCard">
+          <div className="heroRail" aria-hidden="true">
+            <p className="heroDateColumn">
+              {heroDateParts.map((part) => (
+                <span key={part}>{part}</span>
+              ))}
+            </p>
+            <div className="heroDivider" />
           </div>
 
-          <p className="heroReminder">
-            Пожалуйста, не забудьте отправить анкету
-          </p>
+          <div className="heroContent">
+            <p className="sectionTag">Wedding Invitation</p>
+            <div className="heroNamesGroup">
+              <p className="heroNames heroNamePrimary">{brideName}</p>
+              <p className="heroAmpersand">&amp;</p>
+              <p className="heroNames heroNameSecondary">{groomName}</p>
+            </div>
+
+            <h1>С любовью приглашаем вас разделить с нами день, который мы будем помнить всегда.</h1>
+
+            <p className="heroMainDate">{eventDate}</p>
+
+            <p className="heroReminder">До свадьбы осталось</p>
+
+            <div className="heroCountdown" role="list" aria-label="Отсчет до свадьбы">
+              <div className="heroCountdownItem" role="listitem">
+                <span className="heroCountdownValue">{countdown.days}</span>
+                <span className="heroCountdownLabel">дней</span>
+              </div>
+              <div className="heroCountdownItem" role="listitem">
+                <span className="heroCountdownValue">{countdown.hours}</span>
+                <span className="heroCountdownLabel">часов</span>
+              </div>
+              <div className="heroCountdownItem" role="listitem">
+                <span className="heroCountdownValue">{countdown.minutes}</span>
+                <span className="heroCountdownLabel">минут</span>
+              </div>
+              <div className="heroCountdownItem" role="listitem">
+                <span className="heroCountdownValue">{countdown.seconds}</span>
+                <span className="heroCountdownLabel">секунд</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="heroVisual">
+            <GlassPhoto photo={invitationPhoto} className="glassPhoto heroPhoto" decorative />
+          </div>
         </div>
 
-        <PhotoMarquee photos={galleryPhotos} />
+        <PhotoMarquee photos={carouselPhotos} />
       </section>
 
       <section className="sectionShell" id="details">
         <div className="sectionHeader">
           <p className="sectionTag">Приглашение</p>
-          <h2 className="sectionTitle">
-            Мы будем особенно счастливы провести этот вечер рядом с вами
-          </h2>
-          <p className="sectionText">
-            Ниже собрали главные детали праздника в легкой и торжественной подаче, чтобы
-            вам было удобно и приятно знакомиться с нашим приглашением.
-          </p>
+          <h2 className="sectionTitle">Мы будем особенно счастливы провести этот вечер рядом с вами</h2>
         </div>
 
         <div className="detailGrid">
@@ -218,13 +300,35 @@ function App() {
             const DetailIcon = detail.Icon
 
             return (
-              <article className="detailCard surfaceCard" key={detail.title}>
-                <IconShell>
-                  <DetailIcon />
-                </IconShell>
-                <p className="detailLabel">{detail.title}</p>
-                <h3>{detail.value}</h3>
-                <p>{detail.caption}</p>
+              <article
+                className={`detailCard surfaceCard ${detail.schedule ? 'detailCardSchedule' : ''}`}
+                key={detail.title}
+              >
+                <div className="detailHeading">
+                  <IconShell>
+                    <DetailIcon />
+                  </IconShell>
+
+                  <div className="detailHeadingText">
+                    {detail.title ? <p className="detailLabel">{detail.title}</p> : null}
+                    <h3>{detail.value}</h3>
+                  </div>
+                </div>
+                <div className="detailDivider" aria-hidden="true" />
+
+                {detail.meta ? <p className="detailMetaText">{detail.meta}</p> : null}
+                {detail.schedule ? (
+                  <div className="detailSchedule" role="list" aria-label="Свадебное расписание">
+                    {detail.schedule.map((item) => (
+                      <div className="detailScheduleItem" role="listitem" key={`${item.time}-${item.title}`}>
+                        <p className="detailScheduleTime">{item.time}</p>
+                        <p className="detailScheduleTitle">{item.title}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="detailCaption">{detail.caption}</p>
+                )}
               </article>
             )
           })}
@@ -235,21 +339,19 @@ function App() {
         <div className="sectionHeader sectionHeaderTight">
           <p className="sectionTag">Жених и невеста</p>
           <h2 className="sectionTitle">Те, кто с радостью ждут встречи с вами в этот день</h2>
-          <p className="sectionText">
-            Нам хочется, чтобы приглашение было не только о деталях праздника, но и немного
-            о нас самих, поэтому мы оставили здесь два отдельных портрета жениха и невесты.
-          </p>
         </div>
 
         <div className="coupleShowcase">
           {coupleProfiles.map((profile) => (
-            <article className="personCard surfaceCard" key={profile.role}>
-              <GlassPhoto photo={profile.photo} className="glassPhoto personPhoto" />
+            <article className="personCard" key={profile.role}>
+              <GlassPhoto
+                photo={profile.photo}
+                className={`glassPhoto personPhoto personPortrait ${profile.role === 'Жених' ? 'personPortraitGroom' : ''}`.trim()}
+              />
 
               <div className="personContent">
                 <p className="personRole">{profile.role}</p>
                 <h3>{profile.name}</h3>
-                <p>{profile.description}</p>
               </div>
             </article>
           ))}
@@ -267,8 +369,7 @@ function App() {
                 </h2>
                 <p className="sectionText">
                   Нам важно, чтобы ваше прибытие и весь вечер проходили легко и спокойно,
-                  поэтому организационные моменты мы доверили Ирине. Она встретит гостей,
-                  поможет сориентироваться и снимет все лишние вопросы с первых минут.
+                  поэтому организационные моменты мы доверили Ирине.
                 </p>
               </div>
             </div>
@@ -315,43 +416,36 @@ function App() {
               <a className="primaryButton" href={routeUrl} target="_blank" rel="noreferrer">
                 Построить маршрут
               </a>
-              <a className="secondaryButton" href={mapUrl} target="_blank" rel="noreferrer">
-                Открыть карту
-              </a>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="sectionShell sectionShell--dress">
-        <div className="dressBlock">
+      <section className="sectionShell">
+        <div className="dressCard surfaceCard">
           <p className="sectionTag">Dress Code</p>
-          <h2 className="dressTitle">Сливочно-оливковая палитра</h2>
-          <p className="dressText">
-            Будем рады, если ваши образы поддержат палитру: мягкий сливочный свет,
-            шалфейные и оливковые оттенки, шоколадные нюансы, глубокий изумруд и
-            благородный тёмный акцент.
+          <p className="sectionText">
+            Будем рады, если вы поддержите нашу цветовую палитру:
           </p>
           <div className="dressPalette" role="list" aria-label="Рекомендуемая палитра">
             {paletteColors.map((color) => (
               <div className="dressSwatch" key={color.name} title={color.name}>
                 <span className="dressSwatchTone" style={{ backgroundColor: color.tone }} />
-                <span className="dressSwatchName">{color.name}</span>
               </div>
             ))}
           </div>
-          <p className="dressHint">
-            Лаконичные силуэты, гладкие ткани, природные оттенки из палитры
-          </p>
         </div>
       </section>
 
       <section className="sectionShell">
         <div className="wishCard surfaceCard">
           <p className="sectionTag">Пожелание</p>
-          <blockquote>
+          <blockquote className="wishQuote">
             «Если вы захотите порадовать нас приятным комплиментом, вместо цветов мы с
             радостью примем бутылочку вина или шампанского».
+          </blockquote>
+          <blockquote className="wishQuote">
+            «Мы будем искренне благодарны, если вашим подарком станет денежный вклад в нашу молодую семью».
           </blockquote>
           <p className="wishText">
             Нам очень хочется, чтобы каждый жест в этот день был теплым, красивым и
@@ -373,9 +467,8 @@ function App() {
               для @{telegramUsername}, а текст ответа подготовим без лишних действий.
             </p>
 
-            <div className="supportPhotos">
-              <GlassPhoto photo={findPhotoByPath(mainPhotoAssets, '3') ?? galleryPhotos[6]} className="glassPhoto supportPhoto supportPhotoOne" />
-              <GlassPhoto photo={galleryPhotos[7]} className="glassPhoto supportPhoto supportPhotoTwo" />
+            <div className="supportPhotos supportPhotosSingle">
+              <GlassPhoto photo={findPhotoByPath(mainPhotoAssets, 'телеграм') ?? galleryPhotos[0]} className="glassPhoto supportPhoto" />
             </div>
           </div>
 
@@ -392,28 +485,23 @@ function App() {
               />
             </label>
 
-            <label className="field">
+            <div className="field fieldWide">
               <span>Алкогольные предпочтения</span>
-              <select name="alcohol" value={formData.alcohol} onChange={handleChange}>
-                <option value="">Выберите вариант</option>
-                <option value="Игристое">Игристое</option>
-                <option value="Вино">Вино</option>
-                <option value="Коктейли">Коктейли</option>
-                <option value="Безалкогольные напитки">Безалкогольные напитки</option>
-                <option value="Не употребляю алкоголь">Не употребляю алкоголь</option>
-              </select>
-            </label>
-
-            <label className="field fieldWide">
-              <span>Вкусовые предпочтения</span>
-              <textarea
-                name="taste"
-                value={formData.taste}
-                onChange={handleChange}
-                rows="4"
-                placeholder="Например: предпочитаю рыбу, люблю легкие блюда, не ем острое"
-              />
-            </label>
+              <div className="alcoholCheckboxes" role="group" aria-label="Алкогольные предпочтения">
+                {alcoholOptions.map((option) => (
+                  <label key={option} className="checkboxLabel">
+                    <input
+                      type="checkbox"
+                      name="alcohol"
+                      value={option}
+                      checked={formData.alcohol.includes(option)}
+                      onChange={() => handleAlcoholToggle(option)}
+                    />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
             <label className="field fieldWide">
               <span>Аллергии</span>
@@ -431,7 +519,7 @@ function App() {
               type="submit"
               disabled={submitState === 'loading'}
             >
-              {submitState === 'loading' ? 'Отправляем...' : 'Отправить ответ'}
+              {submitState === 'loading' ? 'Отправляем...' : 'Отправить ответ и подтвердить присутствие'}
             </button>
 
             {submitMessage && (
@@ -536,13 +624,12 @@ async function copyToClipboard(text) {
 
 function buildTelegramMessage(formData) {
   return [
-    `${coupleNames}`,
+    `${coupleSignature}`,
     '',
     'Новый ответ гостя:',
     `ФИО: ${formData.fullName || 'не указано'}`,
-    `Вкусовые предпочтения: ${formData.taste || 'не указано'}`,
+    `Алкогольные предпочтения: ${Array.isArray(formData.alcohol) && formData.alcohol.length > 0 ? formData.alcohol.join(', ') : 'не указано'}`,
     `Аллергии: ${formData.allergies || 'не указано'}`,
-    `Алкогольные предпочтения: ${formData.alcohol || 'не указано'}`,
   ].join('\n')
 }
 
@@ -600,19 +687,6 @@ function PlaceIcon() {
         strokeWidth="1.5"
       />
       <circle cx="12" cy="10.25" r="2.25" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  )
-}
-
-function VenueIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M4.5 20.25H19.5M6 20.25V8.25L12 4.5L18 8.25V20.25M9 11.25H9.75M14.25 11.25H15M9 14.25H9.75M14.25 14.25H15"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
     </svg>
   )
 }
